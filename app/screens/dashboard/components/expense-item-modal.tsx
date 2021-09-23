@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react"
 import { View, StyleSheet, Image, TouchableOpacity } from "react-native"
-import { Text } from "../../../components"
+import { Button, Text } from "../../../components"
 import Modal from "react-native-modal"
 import { useStores } from "../../../models"
 import { ExpenseItemData } from "../../../utils/types"
 import { CategoryImages } from "../../add-expense/constants/category-data"
 import { useIsFocused } from "@react-navigation/core"
 import { CurrencyFormatter } from "../../../utils/currency"
+import { CalculatorModal } from "../../add-expense/components/calculator-modal"
+import { CalendarModal } from "../../add-expense/components/calendar-modal"
 
 export const ExpenseItemModal = ({ closeModal, id }) => {
   const isFocused = useIsFocused()
@@ -14,6 +16,16 @@ export const ExpenseItemModal = ({ closeModal, id }) => {
 
   const [expenseDetails, setExpenseDetails] = useState<ExpenseItemData[]>()
   const [expenseCategoryDetails, setExpenseCategoryDetails] = useState([])
+  const [showCalculatorModal, setShowCalculatorModal] = useState(false)
+  const [showCalendarModal, setShowCalendarModal] = useState(false)
+  const [expenseTotal, setExpenseTotal] = useState("")
+  const [chosenDate, setChosenDate] = useState("")
+  const [updateExpenseData, setUpdateExpenseData] = useState({
+    id: "",
+    category: "",
+    total: "",
+    date: "",
+  })
 
   useEffect(() => {
     if (isFocused) {
@@ -21,6 +33,18 @@ export const ExpenseItemModal = ({ closeModal, id }) => {
       setExpenseDetails(data)
     }
   }, [isFocused])
+
+  // Set init values
+  useEffect(() => {
+    if (expenseDetails?.length > 0) {
+      setUpdateExpenseData({
+        id: expenseDetails[0].id,
+        category: expenseDetails[0].category,
+        total: expenseDetails[0].total,
+        date: expenseDetails[0].date,
+      })
+    }
+  }, [expenseDetails])
 
   useEffect(() => {
     if (expenseDetails?.length > 0) {
@@ -31,6 +55,21 @@ export const ExpenseItemModal = ({ closeModal, id }) => {
 
   const deleteExpense = () => {
     expenseStore.deleteExpense(expenseDetails[0].id)
+    closeModal()
+  }
+
+  const onChangeData = (key, value) => {
+    const temp = { ...updateExpenseData }
+    temp.id = expenseDetails[0].id
+    temp.category = expenseDetails[0].category
+    temp[key] = value
+    setUpdateExpenseData(temp)
+  }
+
+  const onUpdateExpenseItem = () => {
+    let refinedReq = []
+    refinedReq.push(updateExpenseData)
+    expenseStore.editExpense(expenseDetails[0].id, refinedReq)
     closeModal()
   }
 
@@ -55,38 +94,110 @@ export const ExpenseItemModal = ({ closeModal, id }) => {
               <View style={ExpenseItemModalStyle.DETAILS_BASE}>
                 <View style={ExpenseItemModalStyle.DETAILS_CONTENT}>
                   <Text preset="fieldLabel" text={"TOTAL EXPENSES: "} />
-                  <Text preset="header" text={CurrencyFormatter(expenseDetails[0]?.total)} />
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text
+                      style={ExpenseItemModalStyle.DETAILS_TEXT}
+                      text={
+                        expenseTotal !== ""
+                          ? CurrencyFormatter(expenseTotal)
+                          : CurrencyFormatter(expenseDetails[0]?.total)
+                      }
+                    />
+                    <TouchableOpacity onPress={() => setShowCalculatorModal(true)}>
+                      <Image
+                        style={ExpenseItemModalStyle.ITEM_ICON}
+                        source={require("../../../../assets/calculator.png")}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
                 <View style={ExpenseItemModalStyle.DETAILS_CONTENT}>
                   <Text preset="fieldLabel" text={"EXPENSE DATE: "} />
-                  <Text preset="header" text={expenseDetails[0]?.date} />
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text
+                      style={ExpenseItemModalStyle.DETAILS_TEXT}
+                      text={chosenDate !== "" ? chosenDate : expenseDetails[0].date}
+                    />
+                    <TouchableOpacity onPress={() => setShowCalendarModal(true)}>
+                      <Image
+                        style={ExpenseItemModalStyle.ITEM_ICON}
+                        source={require("../../../../assets/calendar.png")}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </View>
             <View style={{ alignItems: "flex-end" }}>
-              <TouchableOpacity onPress={() => deleteExpense()}>
-                <Image
-                  source={require("../../../../assets/trash.png")}
-                  style={ExpenseItemModalStyle.TRASH_ICON}
-                />
-              </TouchableOpacity>
+              <View style={{ flexDirection: "row" }}>
+                <Button text="Done Edit" onPress={() => onUpdateExpenseItem()} />
+                <TouchableOpacity onPress={() => deleteExpense()}>
+                  <Image
+                    source={require("../../../../assets/trash.png")}
+                    style={ExpenseItemModalStyle.TRASH_ICON}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         ) : (
           <></>
         )}
+        {showCalculatorModal ? (
+          <CalculatorModal
+            closeModal={() => setShowCalculatorModal(false)}
+            getExpenseTotal={(val) => {
+              setExpenseTotal(val)
+              onChangeData("total", val)
+            }}
+            currentTotal={expenseTotal}
+          />
+        ) : null}
+        {showCalendarModal ? (
+          <CalendarModal
+            closeModal={() => setShowCalendarModal(false)}
+            chosenDate={(val) => {
+              setChosenDate(val)
+              onChangeData("date", val)
+            }}
+          />
+        ) : null}
       </Modal>
     </View>
   )
 }
 
 const ExpenseItemModalStyle = StyleSheet.create({
+  ITEM_ICON: {
+    width: 30,
+    height: 30,
+    marginLeft: 20,
+  },
   DETAILS_BASE: {
     marginTop: 25,
   },
   DETAILS_CONTENT: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
+  DETAILS_TEXT: {
+    borderWidth: 1,
+    fontSize: 18,
+    color: "black",
+    padding: 8,
+    marginVertical: 12,
+    borderRadius: 10,
+    minWidth: "80%",
   },
   CONTAINER: {
     flexDirection: "column",

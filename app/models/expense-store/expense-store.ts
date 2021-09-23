@@ -10,10 +10,22 @@ export const ExpenseStoreModel = types
   .extend(withEnvironment)
   .actions((self) => ({
     saveExpense: (data) => {
+      console.log(data)
       self.expenses.push(data)
     },
     getExpense: (id) => {
       return self.expenses.filter((val) => val.id === id)
+    },
+    editExpense: (id, data) => {
+      console.log("data", data)
+      let tempIndex = self.expenses.findIndex((val) => val.id === id)
+      var res = self.expenses.map((obj) => data?.find((o) => o.id === id) || obj)
+      self.expenses.map((val) => {
+        if (val.id === id) {
+          destroy(val)
+        }
+      })
+      return self.expenses.splice(tempIndex, 0, res[0])
     },
     deleteExpense: (id) => {
       self.expenses.map((val) => {
