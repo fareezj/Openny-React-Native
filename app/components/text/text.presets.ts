@@ -29,12 +29,12 @@ export const presets = {
   /**
    * Large headers.
    */
-  header: { ...BASE, fontSize: 24, fontWeight: "bold" } as TextStyle,
+  header: { ...BASE, fontSize: 20, fontWeight: "bold", color: "black" } as TextStyle,
 
   /**
    * Field labels that appear on forms above the inputs.
    */
-  fieldLabel: { ...BASE, fontSize: 13, color: color.dim } as TextStyle,
+  fieldLabel: { ...BASE, fontSize: 14, color: "black" } as TextStyle,
 
   /**
    * A smaller piece of secondard information.

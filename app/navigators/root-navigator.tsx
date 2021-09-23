@@ -4,11 +4,13 @@
  * and a "main" flow (which is contained in your MainNavigator) which the user
  * will use once logged in.
  */
-import React from "react"
+import React, { useEffect } from "react"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainNavigator } from "./main-navigator"
 import { color } from "../theme"
+import { useStores } from "../models"
+import { CategoryData } from "../screens/add-expense/constants/category-data"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -49,6 +51,18 @@ export const RootNavigator = React.forwardRef<
   NavigationContainerRef,
   Partial<React.ComponentProps<typeof NavigationContainer>>
 >((props, ref) => {
+  const { expenseCategoryStore } = useStores()
+  const { expenseCategories } = expenseCategoryStore
+
+  useEffect(() => {
+    let initCategories = CategoryData
+    if (expenseCategories.length < 1) {
+      initCategories.map((val) => {
+        expenseCategoryStore.saveExpenseCategories(val)
+      })
+    }
+  }, [])
+
   return (
     <NavigationContainer {...props} ref={ref}>
       <RootStack />
