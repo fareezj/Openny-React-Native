@@ -58,7 +58,7 @@ export const ExpenseItemModal = ({ closeModal, id }) => {
     closeModal()
   }
 
-  const onChangeData = (key, value) => {
+  const onChangeData = (key: string, value: string) => {
     const temp = { ...updateExpenseData }
     temp.id = expenseDetails[0].id
     temp.category = expenseDetails[0].category

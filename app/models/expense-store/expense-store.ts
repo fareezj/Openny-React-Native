@@ -17,7 +17,6 @@ export const ExpenseStoreModel = types
       return self.expenses.filter((val) => val.id === id)
     },
     editExpense: (id, data) => {
-      console.log("data", data)
       let tempIndex = self.expenses.findIndex((val) => val.id === id)
       var res = self.expenses.map((obj) => data?.find((o) => o.id === id) || obj)
       self.expenses.map((val) => {
