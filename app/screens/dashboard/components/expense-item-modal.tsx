@@ -139,11 +139,16 @@ export const ExpenseItemModal = ({ closeModal, id }) => {
               </View>
             </View>
             <View style={{ alignItems: "flex-end" }}>
-              <View style={{ flexDirection: "row" }}>
-                <Button text="Done Edit" onPress={() => onUpdateExpenseItem()} />
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <TouchableOpacity onPress={() => onUpdateExpenseItem()}>
+                  <Image
+                    source={require("../../../../assets/tick.png")}
+                    style={ExpenseItemModalStyle.TICK_ICON}
+                  />
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => deleteExpense()}>
                   <Image
-                    source={require("../../../../assets/trash.png")}
+                    source={require("../../../../assets/delete.png")}
                     style={ExpenseItemModalStyle.TRASH_ICON}
                   />
                 </TouchableOpacity>
@@ -228,9 +233,14 @@ const ExpenseItemModalStyle = StyleSheet.create({
     width: 50,
     height: 50,
   },
-  TRASH_ICON: {
+  TICK_ICON: {
     width: 40,
     height: 40,
+    marginHorizontal: 20,
+  },
+  TRASH_ICON: {
+    width: 35,
+    height: 35,
   },
   BASE: {
     flex: 1,
@@ -239,6 +249,7 @@ const ExpenseItemModalStyle = StyleSheet.create({
     maxHeight: 400,
     maxWidth: 400,
     padding: 15,
+    borderRadius: 20,
     justifyContent: "space-between",
   },
   CONTENT: {

@@ -1,9 +1,9 @@
 import React from "react"
 import { StyleSheet, View, Image, TouchableOpacity } from "react-native"
 import { Text } from "../../../components"
-import { ExpenseItemData } from "../../../utils/types"
 import { CategoryData, CategoryImages } from "../../add-expense/constants/category-data"
 import { CurrencyFormatter } from "../../../utils/currency"
+import { PieChartColorHandler } from "./expenses-chart"
 
 export const ExpenseItem = ({
   id,
@@ -37,6 +37,12 @@ const ExpenseCategory = ({ id }: { id: string }) => {
         val.categoryID === id ? (
           <View style={{ flexDirection: "row", alignItems: "center" }} key={id}>
             <Image style={ExpenseStyle.ICON} source={CategoryImages[val.categoryImage].image} />
+            <View
+              style={[
+                ExpenseStyle.CAT_COLOR,
+                { backgroundColor: PieChartColorHandler(val.categoryID) },
+              ]}
+            />
             <Text style={ExpenseStyle.NAME} text={val.categoryName} />
           </View>
         ) : null,
@@ -46,6 +52,12 @@ const ExpenseCategory = ({ id }: { id: string }) => {
 }
 
 const ExpenseStyle = StyleSheet.create({
+  CAT_COLOR: {
+    width: 20,
+    height: 20,
+    borderRadius: 100,
+    marginStart: 10,
+  },
   BASE: {
     backgroundColor: "white",
     borderRadius: 30,
@@ -69,6 +81,6 @@ const ExpenseStyle = StyleSheet.create({
   },
   TOTAL: {
     color: "black",
-    maxWidth: 110,
+    maxWidth: 100,
   },
 })

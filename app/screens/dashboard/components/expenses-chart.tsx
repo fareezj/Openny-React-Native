@@ -89,7 +89,7 @@ export const ExpensesChart = observer(function ExpensesChart() {
   )
 })
 
-const PieChartColorHandler = (categoryID: string) => {
+export const PieChartColorHandler = (categoryID: string) => {
   switch (categoryID) {
     case "1":
       return "#ff8e00"
