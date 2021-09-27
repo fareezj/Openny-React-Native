@@ -1,16 +1,17 @@
 import React, { useState } from "react"
 import {
   View,
-  ViewStyle,
-  TextStyle,
-  ImageStyle,
   StyleSheet,
+  Text as TextComp,
   Image as ImageComp,
   TouchableOpacity,
+  Dimensions,
 } from "react-native"
 import { PieChart } from "react-native-svg-charts"
 import { Circle, G, Line, Text, Image } from "react-native-svg"
-
+import { getPieChartRatioValues } from "./pie-chart-calculation"
+import { CurrencyFormatter } from "../../../../utils/currency"
+const deviceWidth = Dimensions.get("window").width
 export interface PieChartData {
   value: number
   color: string
@@ -20,13 +21,15 @@ export interface PieChartCardProps extends React.PropsWithChildren<any> {
   data: PieChartData[]
   innerRadius: number
   outerRadius: number
+  totalValue: number
   type: string
 }
 
 export const PieChartView = (props: PieChartCardProps) => {
-  const { data, innerRadius, outerRadius, type } = props
+  const { data, innerRadius, outerRadius, type, totalValue } = props
 
   const datas = [50, 10, 40, 95, -4, -24, 85, 91, 23, 34]
+  const tempVal = []
 
   const randomColor = () =>
     ("#" + ((Math.random() * 0xffffff) << 0).toString(16) + "000000").slice(0, 7)
@@ -38,6 +41,14 @@ export const PieChartView = (props: PieChartCardProps) => {
       svg: { fill: data.color },
       key: `pie-${index}`,
     }))
+
+  if (pieData) {
+    pieData.forEach((val) => tempVal.push(val.value))
+    if (tempVal) {
+      const tempRes = getPieChartRatioValues(tempVal)
+      pieData.map((val, index) => (val.value = tempRes[index]))
+    }
+  }
 
   const Labels = ({ slices }) => {
     return slices.map((slice, index) => {
@@ -80,14 +91,36 @@ export const PieChartView = (props: PieChartCardProps) => {
   return (
     <View>
       <PieChart
-        style={{ width: 350, height: 250, borderWidth: 1 }}
+        style={{ width: 350, height: 250 }}
         data={pieData}
         innerRadius={innerRadius}
         outerRadius={outerRadius}
         labelRadius={8}
+        padAngle={0.02}
       >
         {type !== "simple" ? <Labels /> : null}
+        <View>
+          <TextComp style={PieChartStyle.TOTAL_TEXT}>{CurrencyFormatter(totalValue)}</TextComp>
+        </View>
       </PieChart>
     </View>
   )
 }
+
+export const PieChartStyle = StyleSheet.create({
+  TOTAL_TEXT: {
+    position: "absolute",
+    left: deviceWidth / 2 - 88,
+    top: 100,
+    justifyContent: "center",
+    textAlign: "center",
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 18,
+    maxWidth: 140,
+    minWidth: 140,
+    minHeight: 70,
+    maxHeight: 70,
+    borderWidth: 0,
+  },
+})

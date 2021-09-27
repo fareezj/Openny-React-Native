@@ -10,7 +10,6 @@ export const ExpenseStoreModel = types
   .extend(withEnvironment)
   .actions((self) => ({
     saveExpense: (data) => {
-      console.log(data)
       self.expenses.push(data)
     },
     getExpense: (id) => {

@@ -1,22 +1,12 @@
 import React, { useState, useEffect } from "react"
-import {
-  View,
-  ViewStyle,
-  TextStyle,
-  ImageStyle,
-  StyleSheet,
-  Image as ImageComp,
-  TouchableOpacity,
-} from "react-native"
-import { Screen, Text as TextComp } from "../../../components"
-import { PieChart } from "react-native-svg-charts"
-import { Circle, G, Line, Text, Image } from "react-native-svg"
-import { ExpenseChartModal } from "./expense-chart-modal"
-import { PieChartData, PieChartView } from "./pie-chart/pie-chart-view"
+import { View, StyleSheet } from "react-native"
+import { Text as TextComp } from "../../../components"
+import { PieChartView } from "./pie-chart/pie-chart-view"
 import { useIsFocused } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { observer } from "mobx-react-lite"
-import { onAction, onSnapshot } from "mobx-state-tree"
+import { onSnapshot } from "mobx-state-tree"
+import { getPieChartTotalValue } from "./pie-chart/pie-chart-calculation"
 
 export const ExpensesChart = observer(function ExpensesChart() {
   const isFocused = useIsFocused()
@@ -24,6 +14,7 @@ export const ExpensesChart = observer(function ExpensesChart() {
   const { expenses } = expenseStore
   const [showChartDetails, setShowChartDetail] = useState(false)
   const [expenseData, setExpenseData] = useState([])
+  const [totalExpense, setTotalExpense] = useState<number>(0)
   const pieData = [50, 10, 40, 95, -4, -24, 85, 91, 23, 34]
 
   useEffect(() => {
@@ -45,6 +36,7 @@ export const ExpensesChart = observer(function ExpensesChart() {
       */
       var obj2 = []
       var holder = {} // {'1': 2000}
+      var totalExpense
 
       expenses.forEach((d) => {
         if (holder.hasOwnProperty(d.category)) {
@@ -60,12 +52,14 @@ export const ExpensesChart = observer(function ExpensesChart() {
 
       const extractedData = obj2.map((val) => {
         const tempExpense = {}
-        tempExpense["category"] = val.category
+        tempExpense["category"] = parseInt(val.category)
         tempExpense["value"] = parseFloat(val.value)
         tempExpense["color"] = PieChartColorHandler(val.category)
         return tempExpense
       })
+      const totalExpenseVal = getPieChartTotalValue(extractedData)
       setExpenseData(extractedData)
+      setTotalExpense(totalExpenseVal)
     } else {
       setExpenseData([])
     }
@@ -76,7 +70,13 @@ export const ExpensesChart = observer(function ExpensesChart() {
       <TextComp style={ExpenseStyle.TITLE} text="Expenses Chart" />
       {/* <Text style={ExpenseStyle.NO_VALUE} text="No Expense Recorded" /> */}
 
-      <PieChartView data={expenseData} outerRadius={100} innerRadius={40} type={"simple"} />
+      <PieChartView
+        data={expenseData}
+        outerRadius={118}
+        innerRadius={80}
+        type={"simple"}
+        totalValue={totalExpense}
+      />
 
       {/* <TouchableOpacity onPress={() => setShowChartDetail(true)}>
         <ImageComp
