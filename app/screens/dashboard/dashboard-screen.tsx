@@ -54,6 +54,7 @@ export const DashboardScreen = observer(function DashboardScreen() {
               <ExpenseItem
                 id={item.id}
                 category={item.category}
+                colourCode={item.colourCode}
                 total={item.total}
                 date={item.date}
                 onClickDetail={(val) => {

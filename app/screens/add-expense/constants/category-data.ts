@@ -44,4 +44,5 @@ export const CategoryImages = [
   { image: require("../../../../assets/transport.png") },
   { image: require("../../../../assets/grocery.png") },
   { image: require("../../../../assets/tax.png") },
+  { image: require("../../../../assets/tennis.png") },
 ]

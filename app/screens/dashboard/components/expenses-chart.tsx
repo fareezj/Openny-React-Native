@@ -47,16 +47,29 @@ export const ExpensesChart = observer(function ExpensesChart() {
       })
 
       for (var prop in holder) {
-        obj2.push({ category: prop, value: holder[prop] })
-      }
+        const fetchData = expenses.find((val) => {
+          if (val?.category === prop) {
+            console.log("stan", val.colourCode)
+            return val?.colourCode
+          }
+        })
 
-      const extractedData = obj2.map((val) => {
+        obj2.push({
+          category: prop,
+          value: holder[prop],
+          colourCode: fetchData?.colourCode,
+        })
+      }
+      console.log("dog", obj2)
+
+      const extractedData = obj2.map((val, index) => {
         const tempExpense = {}
         tempExpense["category"] = parseInt(val.category)
         tempExpense["value"] = parseFloat(val.value)
-        tempExpense["color"] = PieChartColorHandler(val.category)
+        tempExpense["color"] = val?.colourCode
         return tempExpense
       })
+      console.log("meow", extractedData)
       const totalExpenseVal = getPieChartTotalValue(extractedData)
       setExpenseData(extractedData)
       setTotalExpense(totalExpenseVal)
@@ -105,8 +118,10 @@ export const PieChartColorHandler = (categoryID: string) => {
       return "#F39C12"
     case "7":
       return "#A2D9CE"
+    case "8":
+      return "#F162B8"
     default:
-      return "#FFFFFF"
+      return "#F162B8"
   }
 }
 

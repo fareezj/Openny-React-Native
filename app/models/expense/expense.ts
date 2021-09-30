@@ -5,6 +5,7 @@ export const ExpenseModel = types.model("Expense").props({
   total: types.maybe(types.string),
   category: types.maybe(types.string),
   date: types.maybe(types.string),
+  colourCode: types.maybe(types.string),
 })
 
 type ExpenseType = Instance<typeof ExpenseModel>

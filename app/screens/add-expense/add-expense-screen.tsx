@@ -22,8 +22,9 @@ import { useEffect } from "markdown-to-jsx/node_modules/@types/react"
 
 export const AddExpenseScreen = () => {
   const navigation = useNavigation()
-  const { expenseStore } = useStores()
+  const { expenseStore, expenseCategoryStore } = useStores()
   const { expenses } = expenseStore
+  const { expenseCategories } = expenseCategoryStore
 
   const [showCalculatorModal, setShowCalculatorModal] = useState(false)
   const [showCategoryModal, setShowCategoryModal] = useState(false)
@@ -37,6 +38,7 @@ export const AddExpenseScreen = () => {
     total: "",
     category: "",
     date: "",
+    colourCode: "",
   })
 
   const onInputExpense = (key, value, action) => {
@@ -44,6 +46,18 @@ export const AddExpenseScreen = () => {
       const temp = { ...newExpense }
       temp.id = Math.random().toString()
       temp[key] = value
+      if (key === "category") {
+        let existingValue = expenses.find((val) => val.category === value)
+        if (existingValue) {
+          temp["colourCode"] = existingValue.colourCode
+        } else {
+          temp["colourCode"] = (
+            "#" +
+            ((Math.random() * 0xffffff) << 0).toString(16) +
+            "000000"
+          ).slice(0, 7)
+        }
+      }
       setNewExpense(temp)
       onInputValidation()
     } else {
@@ -105,17 +119,20 @@ export const AddExpenseScreen = () => {
           <View style={AddExpenseStyle.FIELD_ROW}>
             <Text style={AddExpenseStyle.ROW_TITLE} numberOfLines={2} text="Expense Category" />
             <View style={AddExpenseStyle.TEXT_INPUT}>
-              {CategoryData.filter((val) => val.categoryID === chosenCategory).map((val) => {
-                return (
-                  <View style={AddExpenseStyle.CATEGORY_BASE} key={val.categoryID}>
-                    <Image
-                      style={AddExpenseStyle.CATEGORY_ICON}
-                      source={CategoryImages[val.categoryImage].image}
-                    />
-                    <Text style={AddExpenseStyle.CATEGORY_TEXT} text={val.categoryName} />
-                  </View>
-                )
-              })}
+              {expenseCategories.map((val) => console.log(val))}
+              {expenseCategories
+                .filter((val) => val.categoryID === chosenCategory)
+                .map((val) => {
+                  return (
+                    <View style={AddExpenseStyle.CATEGORY_BASE} key={val.categoryID}>
+                      <Image
+                        style={AddExpenseStyle.CATEGORY_ICON}
+                        source={CategoryImages[val.categoryImage].image}
+                      />
+                      <Text style={AddExpenseStyle.CATEGORY_TEXT} text={val.categoryName} />
+                    </View>
+                  )
+                })}
             </View>
             <TouchableOpacity onPress={() => setShowCategoryModal(true)}>
               <Image

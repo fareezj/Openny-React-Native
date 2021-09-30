@@ -4,25 +4,28 @@ import { Text } from "../../../components"
 import { CategoryData, CategoryImages } from "../../add-expense/constants/category-data"
 import { CurrencyFormatter } from "../../../utils/currency"
 import { PieChartColorHandler } from "./expenses-chart"
+import { useStores } from "../../../models"
 
 export const ExpenseItem = ({
   id,
   total,
   category,
   date,
+  colourCode,
   onClickDetail,
 }: {
   id: string
   total: string
   category: string
   date: string
+  colourCode: string
   onClickDetail: (data: string) => void
 }) => {
   return (
     <View style={ExpenseStyle.BASE}>
       <TouchableOpacity onPress={() => onClickDetail(id)}>
         <View style={ExpenseStyle.CONTAINER}>
-          <ExpenseCategory id={category} />
+          <ExpenseCategory id={category} colourCode={colourCode} />
           <Text style={ExpenseStyle.TOTAL} text={CurrencyFormatter(total)} />
         </View>
       </TouchableOpacity>
@@ -30,19 +33,17 @@ export const ExpenseItem = ({
   )
 }
 
-const ExpenseCategory = ({ id }: { id: string }) => {
+const ExpenseCategory = ({ id, colourCode }: { id: string; colourCode: string }) => {
+  const { expenseCategoryStore } = useStores()
+  const { expenseCategories } = expenseCategoryStore
+
   return (
     <View>
-      {CategoryData.map((val) =>
+      {expenseCategories.map((val) =>
         val.categoryID === id ? (
           <View style={{ flexDirection: "row", alignItems: "center" }} key={id}>
             <Image style={ExpenseStyle.ICON} source={CategoryImages[val.categoryImage].image} />
-            <View
-              style={[
-                ExpenseStyle.CAT_COLOR,
-                { backgroundColor: PieChartColorHandler(val.categoryID) },
-              ]}
-            />
+            <View style={[ExpenseStyle.CAT_COLOR, { backgroundColor: colourCode }]} />
             <Text style={ExpenseStyle.NAME} text={val.categoryName} />
           </View>
         ) : null,
