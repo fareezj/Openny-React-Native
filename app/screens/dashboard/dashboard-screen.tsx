@@ -10,6 +10,7 @@ import { ExpenseItem } from "./components/expense-item"
 import { observer } from "mobx-react-lite"
 import { ExpenseItemData } from "../../utils/types"
 import { ExpenseItemModal } from "./components/expense-item-modal"
+import { NewUserModal } from "./components/new-user-modal"
 
 const actions = [
   {
@@ -26,10 +27,12 @@ const actions = [
 export const DashboardScreen = observer(function DashboardScreen() {
   const navigation = useNavigation()
   const isFocused = useIsFocused()
-  const { expenseStore } = useStores()
+  const { expenseStore, userStore } = useStores()
   const { expenses } = expenseStore
+  const { users } = userStore
   const [expenseItem, setExpenseItem] = useState<ExpenseItemData[]>()
-  const [showExpenseDetail, setShowExpenseDetail] = useState(false)
+  const [showExpenseDetail, setShowExpenseDetail] = useState<boolean>(false)
+  const [showNewUserModal, setNewUserModal] = useState<boolean>(false)
   const [currentExpenseDetail, setCurrentExpenseDetail] = useState("")
 
   useEffect(() => {
@@ -42,7 +45,7 @@ export const DashboardScreen = observer(function DashboardScreen() {
     <View style={DashboardStyle.FULL}>
       <Screen style={DashboardStyle.CONTAINER} preset="fixed" backgroundColor={color.transparent}>
         <View style={DashboardStyle.HEADER}>
-          <Text style={DashboardStyle.HEADER_NAME} text="Hello Fareez" />
+          <Text style={DashboardStyle.HEADER_NAME} text={"Hello " + users[0]?.name} />
           <Image source={require("../../../assets/user.png")} style={DashboardStyle.HEADER_ICON} />
         </View>
         <ExpensesChart />
@@ -77,6 +80,7 @@ export const DashboardScreen = observer(function DashboardScreen() {
           id={currentExpenseDetail}
         />
       ) : null}
+      {users.length === 0 ? <NewUserModal closeModal={() => setNewUserModal(false)} /> : null}
     </View>
   )
 })
@@ -95,6 +99,7 @@ const DashboardStyle = StyleSheet.create({
   HEADER_NAME: {
     fontSize: 22,
     fontWeight: "bold",
+    padding: 10,
   },
   HEADER_ICON: {
     width: 100,
