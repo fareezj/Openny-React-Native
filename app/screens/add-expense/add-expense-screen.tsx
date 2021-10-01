@@ -10,15 +10,14 @@ import {
   TextInput,
 } from "react-native"
 import { Screen, Text } from "../../components"
-import { color, spacing, typography } from "../../theme"
+import { color, spacing } from "../../theme"
 import { useNavigation } from "@react-navigation/native"
 import { CalculatorModal } from "./components/calculator-modal"
 import { CurrencyFormatter } from "../../utils/currency"
 import { CategoryModal } from "./components/category-modal"
-import { CategoryData, CategoryImages } from "./constants/category-data"
+import { CategoryImages } from "./constants/category-data"
 import { CalendarModal } from "./components/calendar-modal"
 import { useStores } from "../../models"
-import { useEffect } from "markdown-to-jsx/node_modules/@types/react"
 
 export const AddExpenseScreen = () => {
   const navigation = useNavigation()
@@ -59,7 +58,7 @@ export const AddExpenseScreen = () => {
         }
       }
       setNewExpense(temp)
-      onInputValidation()
+      onInputValidation(temp)
     } else {
       const temp = { ...newExpense }
       Object.keys(temp).forEach((key) => {
@@ -71,7 +70,13 @@ export const AddExpenseScreen = () => {
   }
 
   const onInputValidation = (temp?: object) => {
-    const isEmpty = Object.values(temp || newExpense).every((x) => !x || x.length === 0)
+    let isEmpty
+    for (let i in temp) {
+      if (temp[i] === "") {
+        isEmpty = true
+      }
+    }
+    console.log("stan", isEmpty)
     isEmpty ? setIsFormValid(false) : setIsFormValid(true)
   }
 

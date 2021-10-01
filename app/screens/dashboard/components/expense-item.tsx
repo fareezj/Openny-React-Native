@@ -1,9 +1,8 @@
 import React from "react"
 import { StyleSheet, View, Image, TouchableOpacity } from "react-native"
 import { Text } from "../../../components"
-import { CategoryData, CategoryImages } from "../../add-expense/constants/category-data"
+import { CategoryImages } from "../../add-expense/constants/category-data"
 import { CurrencyFormatter } from "../../../utils/currency"
-import { PieChartColorHandler } from "./expenses-chart"
 import { useStores } from "../../../models"
 
 export const ExpenseItem = ({

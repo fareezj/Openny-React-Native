@@ -25,6 +25,7 @@ export const ExpenseItemModal = ({ closeModal, id }) => {
     category: "",
     total: "",
     date: "",
+    colourCode: "",
   })
 
   useEffect(() => {
@@ -42,6 +43,7 @@ export const ExpenseItemModal = ({ closeModal, id }) => {
         category: expenseDetails[0].category,
         total: expenseDetails[0].total,
         date: expenseDetails[0].date,
+        colourCode: expenseDetails[0].colourCode,
       })
     }
   }, [expenseDetails])
@@ -62,6 +64,7 @@ export const ExpenseItemModal = ({ closeModal, id }) => {
     const temp = { ...updateExpenseData }
     temp.id = expenseDetails[0].id
     temp.category = expenseDetails[0].category
+    temp.colourCode = expenseDetails[0].colourCode
     temp[key] = value
     setUpdateExpenseData(temp)
   }

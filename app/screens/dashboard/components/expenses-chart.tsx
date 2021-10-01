@@ -24,7 +24,7 @@ export const ExpensesChart = observer(function ExpensesChart() {
   }, [expenses, isFocused])
 
   onSnapshot(expenseStore, (newSnapshot) => {
-    console.info("Got new snapshot:", newSnapshot)
+    // console.info("Got new snapshot:", newSnapshot)
     PieChartValueGenerator()
   })
 
@@ -36,7 +36,6 @@ export const ExpensesChart = observer(function ExpensesChart() {
       */
       var obj2 = []
       var holder = {} // {'1': 2000}
-      var totalExpense
 
       expenses.forEach((d) => {
         if (holder.hasOwnProperty(d.category)) {
@@ -47,9 +46,9 @@ export const ExpensesChart = observer(function ExpensesChart() {
       })
 
       for (var prop in holder) {
+        // Get colour code for each category
         const fetchData = expenses.find((val) => {
           if (val?.category === prop) {
-            console.log("stan", val.colourCode)
             return val?.colourCode
           }
         })
@@ -60,7 +59,6 @@ export const ExpensesChart = observer(function ExpensesChart() {
           colourCode: fetchData?.colourCode,
         })
       }
-      console.log("dog", obj2)
 
       const extractedData = obj2.map((val, index) => {
         const tempExpense = {}
@@ -69,7 +67,7 @@ export const ExpensesChart = observer(function ExpensesChart() {
         tempExpense["color"] = val?.colourCode
         return tempExpense
       })
-      console.log("meow", extractedData)
+
       const totalExpenseVal = getPieChartTotalValue(extractedData)
       setExpenseData(extractedData)
       setTotalExpense(totalExpenseVal)
