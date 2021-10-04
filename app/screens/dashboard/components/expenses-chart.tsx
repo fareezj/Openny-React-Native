@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { View, StyleSheet } from "react-native"
 import { Text as TextComp } from "../../../components"
-import { PieChartView } from "./pie-chart/pie-chart-view"
+import { PieChartData, PieChartView } from "./pie-chart/pie-chart-view"
 import { useIsFocused } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { observer } from "mobx-react-lite"
@@ -12,10 +12,8 @@ export const ExpensesChart = observer(function ExpensesChart() {
   const isFocused = useIsFocused()
   const { expenseStore } = useStores()
   const { expenses } = expenseStore
-  const [showChartDetails, setShowChartDetail] = useState(false)
-  const [expenseData, setExpenseData] = useState([])
+  const [expenseData, setExpenseData] = useState<PieChartData[]>([])
   const [totalExpense, setTotalExpense] = useState<number>(0)
-  const pieData = [50, 10, 40, 95, -4, -24, 85, 91, 23, 34]
 
   useEffect(() => {
     if (isFocused) {
@@ -24,7 +22,6 @@ export const ExpensesChart = observer(function ExpensesChart() {
   }, [expenses, isFocused])
 
   onSnapshot(expenseStore, (newSnapshot) => {
-    // console.info("Got new snapshot:", newSnapshot)
     PieChartValueGenerator()
   })
 

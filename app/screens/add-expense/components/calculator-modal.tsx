@@ -1,14 +1,5 @@
-import React, { useState } from "react"
-import {
-  ScrollView,
-  View,
-  SafeAreaView,
-  StyleSheet,
-  Dimensions,
-  TextInput,
-  Button,
-} from "react-native"
-import { Screen, Text } from "../../../components"
+import React from "react"
+import { View, StyleSheet } from "react-native"
 import Modal from "react-native-modal"
 import { Calculator } from "react-native-calculator"
 

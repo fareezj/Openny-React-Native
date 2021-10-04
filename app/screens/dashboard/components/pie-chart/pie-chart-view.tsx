@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import {
   View,
   StyleSheet,
@@ -13,10 +13,10 @@ import { getPieChartRatioValues } from "./pie-chart-calculation"
 import { CurrencyFormatter } from "../../../../utils/currency"
 const deviceWidth = Dimensions.get("window").width
 export interface PieChartData {
+  category: number
   value: number
   color: string
 }
-
 export interface PieChartCardProps extends React.PropsWithChildren<any> {
   data: PieChartData[]
   innerRadius: number

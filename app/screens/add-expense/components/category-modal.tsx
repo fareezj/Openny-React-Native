@@ -1,17 +1,6 @@
-import React, { useState, useEffect } from "react"
-import {
-  ScrollView,
-  View,
-  SafeAreaView,
-  StyleSheet,
-  Dimensions,
-  TextInput,
-  Button,
-  Image,
-  FlatList,
-  TouchableOpacity,
-} from "react-native"
-import { Screen, Text } from "../../../components"
+import React, { useState } from "react"
+import { ScrollView, View, StyleSheet, Image, TouchableOpacity } from "react-native"
+import { Text } from "../../../components"
 import Modal from "react-native-modal"
 import R from "ramda"
 import { CategoryItemData } from "../../../utils/types"

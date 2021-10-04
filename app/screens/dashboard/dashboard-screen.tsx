@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { View, ViewStyle, TextStyle, ImageStyle, Image, StyleSheet, FlatList } from "react-native"
+import { View, Image, StyleSheet, FlatList } from "react-native"
 import { Screen, Text } from "../../components"
 import { color, spacing } from "../../theme"
 import { ExpensesChart } from "./components/expenses-chart"
@@ -33,7 +33,7 @@ export const DashboardScreen = observer(function DashboardScreen() {
   const [expenseItem, setExpenseItem] = useState<ExpenseItemData[]>()
   const [showExpenseDetail, setShowExpenseDetail] = useState<boolean>(false)
   const [showNewUserModal, setNewUserModal] = useState<boolean>(false)
-  const [currentExpenseDetail, setCurrentExpenseDetail] = useState("")
+  const [currentExpenseID, setCurrentExpenseID] = useState<string>("")
 
   useEffect(() => {
     if (isFocused) {
@@ -60,8 +60,8 @@ export const DashboardScreen = observer(function DashboardScreen() {
                 colourCode={item.colourCode}
                 total={item.total}
                 date={item.date}
-                onClickDetail={(val) => {
-                  setCurrentExpenseDetail(val)
+                onClickDetail={(id: string) => {
+                  setCurrentExpenseID(id)
                   setShowExpenseDetail(true)
                 }}
               />
@@ -75,10 +75,7 @@ export const DashboardScreen = observer(function DashboardScreen() {
         onPressItem={(name) => navigation.navigate(name)}
       />
       {showExpenseDetail ? (
-        <ExpenseItemModal
-          closeModal={() => setShowExpenseDetail(false)}
-          id={currentExpenseDetail}
-        />
+        <ExpenseItemModal closeModal={() => setShowExpenseDetail(false)} id={currentExpenseID} />
       ) : null}
       {users.length === 0 ? <NewUserModal closeModal={() => setNewUserModal(false)} /> : null}
     </View>

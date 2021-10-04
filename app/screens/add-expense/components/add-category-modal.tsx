@@ -1,26 +1,14 @@
-import React, { useState, useEffect } from "react"
-import {
-  ScrollView,
-  View,
-  SafeAreaView,
-  StyleSheet,
-  Dimensions,
-  TextInput,
-  Image,
-  FlatList,
-  TouchableOpacity,
-} from "react-native"
-import { Screen, Text, Button } from "../../../components"
+import React, { useState } from "react"
+import { ScrollView, View, StyleSheet, TextInput, Image, TouchableOpacity } from "react-native"
+import { Text, Button } from "../../../components"
 import Modal from "react-native-modal"
 import { CategoryImages } from "../constants/category-data"
 import { ExpenseCategory } from "../../../models/expense-category/expense-category"
 import { useStores } from "../../../models"
-import { onSnapshot } from "mobx-state-tree"
 
 export const AddCategoryModal = ({ closeModal }) => {
   const { expenseCategoryStore } = useStores()
   const { expenseCategories } = expenseCategoryStore
-  const [categoryName, setCategoryName] = useState<string>("")
   const [addCategoryReqBody, setAddCategoryReqBody] = useState<ExpenseCategory>({
     categoryID: "",
     categoryName: "",

@@ -1,14 +1,5 @@
 import React, { useState } from "react"
-import {
-  View,
-  ViewStyle,
-  TextStyle,
-  ImageStyle,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-} from "react-native"
+import { View, Image, StyleSheet, TouchableOpacity, TextInput } from "react-native"
 import { Screen, Text } from "../../components"
 import { color, spacing } from "../../theme"
 import { useNavigation } from "@react-navigation/native"
@@ -18,6 +9,7 @@ import { CategoryModal } from "./components/category-modal"
 import { CategoryImages } from "./constants/category-data"
 import { CalendarModal } from "./components/calendar-modal"
 import { useStores } from "../../models"
+import { Expense } from "../../models/expense/expense"
 
 export const AddExpenseScreen = () => {
   const navigation = useNavigation()
@@ -25,14 +17,14 @@ export const AddExpenseScreen = () => {
   const { expenses } = expenseStore
   const { expenseCategories } = expenseCategoryStore
 
-  const [showCalculatorModal, setShowCalculatorModal] = useState(false)
-  const [showCategoryModal, setShowCategoryModal] = useState(false)
-  const [showCalendarModal, setShowCalendarModal] = useState(false)
-  const [expenseTotal, setExpenseTotal] = useState("")
-  const [chosenCategory, setChosenCategory] = useState("")
-  const [chosenDate, setChosenDate] = useState("")
-  const [isFormValid, setIsFormValid] = useState(false)
-  const [newExpense, setNewExpense] = useState({
+  const [showCalculatorModal, setShowCalculatorModal] = useState<boolean>(false)
+  const [showCategoryModal, setShowCategoryModal] = useState<boolean>(false)
+  const [showCalendarModal, setShowCalendarModal] = useState<boolean>(false)
+  const [expenseTotal, setExpenseTotal] = useState<string>("")
+  const [chosenCategory, setChosenCategory] = useState<string>("")
+  const [chosenDate, setChosenDate] = useState<string>("")
+  const [isFormValid, setIsFormValid] = useState<boolean>(false)
+  const [newExpense, setNewExpense] = useState<Expense>({
     id: "",
     total: "",
     category: "",

@@ -1,17 +1,6 @@
-import React, { useState, useEffect } from "react"
-import {
-  ScrollView,
-  View,
-  SafeAreaView,
-  StyleSheet,
-  Dimensions,
-  TextInput,
-  Button,
-  Image,
-  FlatList,
-  TouchableOpacity,
-} from "react-native"
-import { Screen, Text } from "../../../components"
+import React, { useState } from "react"
+import { View, StyleSheet, Button, Image } from "react-native"
+import { Text } from "../../../components"
 import Modal from "react-native-modal"
 import { Calendar } from "react-native-calendars"
 import moment from "moment"
