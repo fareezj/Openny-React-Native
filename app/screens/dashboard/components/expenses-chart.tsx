@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from "react"
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet, Image } from "react-native"
 import { Text as TextComp } from "../../../components"
 import { PieChartData, PieChartView } from "./pie-chart/pie-chart-view"
 import { useIsFocused } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { observer } from "mobx-react-lite"
 import { onSnapshot } from "mobx-state-tree"
 import { getPieChartTotalValue } from "./pie-chart/pie-chart-calculation"
+import HorizontalPicker from "@vseslav/react-native-horizontal-picker"
+import moment from "moment"
 
-export const ExpensesChart = observer(function ExpensesChart() {
+export const ExpensesChart = ({ pickedMonth }: { pickedMonth: (val: number) => void }) => {
   const isFocused = useIsFocused()
   const { expenseStore } = useStores()
   const { expenses } = expenseStore
   const [expenseData, setExpenseData] = useState<PieChartData[]>([])
   const [totalExpense, setTotalExpense] = useState<number>(0)
+  const Items = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  const itemWidth = 100
 
   useEffect(() => {
     if (isFocused) {
@@ -21,7 +24,7 @@ export const ExpensesChart = observer(function ExpensesChart() {
     }
   }, [expenses, isFocused])
 
-  onSnapshot(expenseStore, (newSnapshot) => {
+  onSnapshot(expenseStore, () => {
     PieChartValueGenerator()
   })
 
@@ -57,7 +60,7 @@ export const ExpensesChart = observer(function ExpensesChart() {
         })
       }
 
-      const extractedData = obj2.map((val, index) => {
+      const extractedData = obj2.map((val) => {
         const tempExpense = {}
         tempExpense["category"] = parseInt(val.category)
         tempExpense["value"] = parseFloat(val.value)
@@ -73,18 +76,41 @@ export const ExpensesChart = observer(function ExpensesChart() {
     }
   }
 
+  const renderMonth = (item) => (
+    <View style={{ width: itemWidth, alignItems: "center" }}>
+      <TextComp preset="fieldLabel" style={{ color: "white", fontSize: 25 }} text={item} />
+    </View>
+  )
+
   return (
     <View style={ExpenseStyle.CHART_CARD}>
       <TextComp style={ExpenseStyle.TITLE} text="Expenses Chart" />
-      {/* <Text style={ExpenseStyle.NO_VALUE} text="No Expense Recorded" /> */}
 
-      <PieChartView
-        data={expenseData}
-        outerRadius={118}
-        innerRadius={80}
-        type={"simple"}
-        totalValue={totalExpense}
+      <View style={{ height: 40 }}>
+        <HorizontalPicker
+          data={Items}
+          renderItem={renderMonth}
+          itemWidth={itemWidth}
+          onChange={(val) => pickedMonth(parseInt(moment(Items[val], "MMM").format("MM")))}
+        />
+      </View>
+      <Image
+        source={require("../../../../assets/up-arrows.png")}
+        style={{ width: 30, height: 30, tintColor: "white" }}
       />
+      {expenseData.length !== 0 ? (
+        <PieChartView
+          data={expenseData}
+          outerRadius={118}
+          innerRadius={80}
+          type={"simple"}
+          totalValue={totalExpense}
+        />
+      ) : (
+        <>
+          <TextComp style={ExpenseStyle.NO_VALUE} text="No Expense Recorded" />
+        </>
+      )}
 
       {/* <TouchableOpacity onPress={() => setShowChartDetail(true)}>
         <ImageComp
@@ -95,7 +121,7 @@ export const ExpensesChart = observer(function ExpensesChart() {
       {showChartDetails ? <ExpenseChartModal closeModal={() => setShowChartDetail(false)} /> : null} */}
     </View>
   )
-})
+}
 
 export const PieChartColorHandler = (categoryID: string) => {
   switch (categoryID) {

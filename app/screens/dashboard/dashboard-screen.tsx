@@ -11,6 +11,7 @@ import { observer } from "mobx-react-lite"
 import { ExpenseItemData } from "../../utils/types"
 import { ExpenseItemModal } from "./components/expense-item-modal"
 import { NewUserModal } from "./components/new-user-modal"
+import { ExpenseDateSorter } from "../../utils/expenseDateSorter"
 
 const actions = [
   {
@@ -34,12 +35,14 @@ export const DashboardScreen = observer(function DashboardScreen() {
   const [showExpenseDetail, setShowExpenseDetail] = useState<boolean>(false)
   const [showNewUserModal, setNewUserModal] = useState<boolean>(false)
   const [currentExpenseID, setCurrentExpenseID] = useState<string>("")
+  const [currentMonth, setCurrentMonth] = useState<number>(10)
 
   useEffect(() => {
     if (isFocused) {
-      setExpenseItem(expenses)
+      const res = ExpenseDateSorter(expenses, currentMonth.toString())
+      setExpenseItem(res)
     }
-  }, [isFocused, observer])
+  }, [isFocused, observer, currentMonth])
 
   return (
     <View style={DashboardStyle.FULL}>
@@ -48,7 +51,7 @@ export const DashboardScreen = observer(function DashboardScreen() {
           <Text style={DashboardStyle.HEADER_NAME} text={"Hello " + users[0]?.name} />
           <Image source={require("../../../assets/user.png")} style={DashboardStyle.HEADER_ICON} />
         </View>
-        <ExpensesChart />
+        <ExpensesChart pickedMonth={(val) => setCurrentMonth(val)} />
         <FlatList
           data={expenseItem}
           keyExtractor={(item) => item.id}
