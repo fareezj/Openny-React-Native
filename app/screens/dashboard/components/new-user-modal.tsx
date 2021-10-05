@@ -8,7 +8,6 @@ import { User } from "../../../models/user/user"
 
 export const NewUserModal = ({ closeModal }) => {
   const { userStore } = useStores()
-  const { users } = userStore
   const [name, setName] = useState<string>("")
   const [nameReqBody, setNameReqBody] = useState<User>({
     id: "",

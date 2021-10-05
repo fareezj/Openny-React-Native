@@ -12,6 +12,10 @@ import { ExpenseItemData } from "../../utils/types"
 import { ExpenseItemModal } from "./components/expense-item-modal"
 import { NewUserModal } from "./components/new-user-modal"
 import { ExpenseDateSorter } from "../../utils/expenseDateSorter"
+import { onSnapshot } from "mobx-state-tree"
+import { LogBox } from "react-native"
+LogBox.ignoreLogs(["Warning: ..."]) // Ignore log notification by message
+LogBox.ignoreAllLogs() //Ignore all log notifications
 
 const actions = [
   {
@@ -35,23 +39,28 @@ export const DashboardScreen = observer(function DashboardScreen() {
   const [showExpenseDetail, setShowExpenseDetail] = useState<boolean>(false)
   const [showNewUserModal, setNewUserModal] = useState<boolean>(false)
   const [currentExpenseID, setCurrentExpenseID] = useState<string>("")
-  const [currentMonth, setCurrentMonth] = useState<number>(10)
+  const [currentMonth, setCurrentMonth] = useState<number>(1)
 
   useEffect(() => {
     if (isFocused) {
       const res = ExpenseDateSorter(expenses, currentMonth.toString())
       setExpenseItem(res)
     }
-  }, [isFocused, observer, currentMonth])
+  }, [isFocused, currentMonth])
+
+  onSnapshot(expenseStore, () => {
+    const res = ExpenseDateSorter(expenses, currentMonth.toString())
+    setExpenseItem(res)
+  })
 
   return (
     <View style={DashboardStyle.FULL}>
       <Screen style={DashboardStyle.CONTAINER} preset="fixed" backgroundColor={color.transparent}>
         <View style={DashboardStyle.HEADER}>
-          <Text style={DashboardStyle.HEADER_NAME} text={"Hello " + users[0]?.name} />
+          <Text style={DashboardStyle.HEADER_NAME} text={"Hello " + users[0]?.name ?? ""} />
           <Image source={require("../../../assets/user.png")} style={DashboardStyle.HEADER_ICON} />
         </View>
-        <ExpensesChart pickedMonth={(val) => setCurrentMonth(val)} />
+        <ExpensesChart expenseDetails={expenseItem} pickedMonth={(val) => setCurrentMonth(val)} />
         <FlatList
           data={expenseItem}
           keyExtractor={(item) => item.id}

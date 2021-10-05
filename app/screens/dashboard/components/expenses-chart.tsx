@@ -8,8 +8,16 @@ import { onSnapshot } from "mobx-state-tree"
 import { getPieChartTotalValue } from "./pie-chart/pie-chart-calculation"
 import HorizontalPicker from "@vseslav/react-native-horizontal-picker"
 import moment from "moment"
+import { Expense } from "../../../models/expense/expense"
+import { ExpenseItemData } from "../../../utils/types"
 
-export const ExpensesChart = ({ pickedMonth }: { pickedMonth: (val: number) => void }) => {
+export const ExpensesChart = ({
+  expenseDetails,
+  pickedMonth,
+}: {
+  expenseDetails: ExpenseItemData[]
+  pickedMonth: (val: number) => void
+}) => {
   const isFocused = useIsFocused()
   const { expenseStore } = useStores()
   const { expenses } = expenseStore
@@ -22,22 +30,22 @@ export const ExpensesChart = ({ pickedMonth }: { pickedMonth: (val: number) => v
     if (isFocused) {
       PieChartValueGenerator()
     }
-  }, [expenses, isFocused])
+  }, [expenses, isFocused, expenseDetails])
 
   onSnapshot(expenseStore, () => {
     PieChartValueGenerator()
   })
 
   function PieChartValueGenerator() {
-    if (expenses.length > 0) {
+    if (expenseDetails?.length > 0) {
       /*
        TO FILTER DUPLICATED EXPENSE CATEGORY 
-       AND CALCULATE THE TOTAL EXPENSES
+       AND CALCULATE THE TOTAL expenseDetails?
       */
       var obj2 = []
       var holder = {} // {'1': 2000}
 
-      expenses.forEach((d) => {
+      expenseDetails?.forEach((d) => {
         if (holder.hasOwnProperty(d.category)) {
           holder[d.category] = parseFloat(holder[d.category]) + parseFloat(d.total)
         } else {
@@ -47,7 +55,7 @@ export const ExpensesChart = ({ pickedMonth }: { pickedMonth: (val: number) => v
 
       for (var prop in holder) {
         // Get colour code for each category
-        const fetchData = expenses.find((val) => {
+        const fetchData = expenseDetails?.find((val) => {
           if (val?.category === prop) {
             return val?.colourCode
           }
