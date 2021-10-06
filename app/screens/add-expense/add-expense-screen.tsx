@@ -10,6 +10,7 @@ import { CategoryImages } from "./constants/category-data"
 import { CalendarModal } from "./components/calendar-modal"
 import { useStores } from "../../models"
 import { Expense } from "../../models/expense/expense"
+import { HeaderBack } from "../../components/header-back/header-back"
 
 export const AddExpenseScreen = () => {
   const navigation = useNavigation()
@@ -88,15 +89,7 @@ export const AddExpenseScreen = () => {
   return (
     <View style={AddExpenseStyle.FULL}>
       <Screen style={AddExpenseStyle.CONTAINER} preset="fixed" backgroundColor={color.transparent}>
-        <View style={AddExpenseStyle.HEADER_BASE}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              source={require("../../../assets/back-icon.png")}
-              style={AddExpenseStyle.BACK_ICON}
-            />
-          </TouchableOpacity>
-          <Text style={AddExpenseStyle.HEADER_TITLE} text="Add New Expense" />
-        </View>
+        <HeaderBack title={"Add New Expense"} />
         <View style={AddExpenseStyle.FIELD_BASE}>
           <View style={AddExpenseStyle.FIELD_ROW}>
             <Text style={AddExpenseStyle.ROW_TITLE} numberOfLines={2} text="Total Expense" />
@@ -251,15 +244,6 @@ const AddExpenseStyle = StyleSheet.create({
   CONTAINER: {
     backgroundColor: color.transparent,
     paddingHorizontal: spacing[4],
-  },
-  HEADER_BASE: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  HEADER_TITLE: {
-    fontSize: 22,
-    fontWeight: "bold",
-    paddingLeft: 20,
   },
   BACK_ICON: {
     width: 25,

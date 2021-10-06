@@ -9,6 +9,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
 import { DashboardScreen } from "../screens/dashboard/dashboard-screen"
 import { AddExpenseScreen } from "../screens/add-expense/add-expense-screen"
+import { AnalyticScreen } from "../screens/expense-analytics/analytics-screen"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -28,6 +29,7 @@ export type PrimaryParamList = {
   demoList: undefined
   dashboard: undefined
   addExpense: undefined
+  analytics: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -46,6 +48,7 @@ export function MainNavigator() {
       <Stack.Screen name="demoList" component={DemoListScreen} /> */}
       <Stack.Screen name="dashboard" component={DashboardScreen} />
       <Stack.Screen name="addExpense" component={AddExpenseScreen} />
+      <Stack.Screen name="analytics" component={AnalyticScreen} />
     </Stack.Navigator>
   )
 }

@@ -27,6 +27,15 @@ const actions = [
     textStyle: { color: "white" },
     textBackground: "rgba(52, 52, 52, 0)",
   },
+  {
+    text: "Expense Analytics",
+    icon: require("../../../assets/wallet-out.png"),
+    name: "analytics",
+    position: 1,
+    buttonSize: 40,
+    textStyle: { color: "white" },
+    textBackground: "rgba(52, 52, 52, 0)",
+  },
 ]
 
 export const DashboardScreen = observer(function DashboardScreen() {
