@@ -1,8 +1,8 @@
 import React, { useState } from "react"
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet, Button } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 import Modal from "react-native-modal"
-import { Button, Text } from "../../../components"
+import { Text } from "../../../components"
 import { useStores } from "../../../models"
 import { User } from "../../../models/user/user"
 
@@ -29,14 +29,20 @@ export const NewUserModal = ({ closeModal }) => {
       <Modal isVisible={true} onBackdropPress={() => closeModal()}>
         <View style={NewUserStyle.BASE}>
           <View style={NewUserStyle.CONTENT}>
-            <Text preset="fieldLabel" text="Welcome to Openny!" />
+            <Text
+              preset="fieldLabel"
+              text="Welcome to Openny!"
+              style={NewUserStyle.GREETING_TEXT}
+            />
             <TextInput
               placeholder="Please enter your name"
               value={name}
               onChangeText={setName}
               style={NewUserStyle.TEXT_INPUT}
             />
-            <Button text="Okay!" onPress={() => addNewUser()} />
+            <View style={NewUserStyle.BUTTON}>
+              <Button title="Okay!" onPress={() => addNewUser()} />
+            </View>
           </View>
         </View>
       </Modal>
@@ -45,26 +51,39 @@ export const NewUserModal = ({ closeModal }) => {
 }
 
 const NewUserStyle = StyleSheet.create({
+  BUTTON: {
+    width: "50%",
+    marginTop: 30,
+    borderWidth: 1,
+    borderRadius: 30,
+    alignSelf: "center",
+  },
+  GREETING_TEXT: {
+    textAlign: "center",
+    fontSize: 22,
+    fontWeight: "bold",
+  },
   BASE: {
     flex: 1,
     borderWidth: 1,
     backgroundColor: "white",
-    maxHeight: 400,
+    maxHeight: 200,
     maxWidth: 400,
     padding: 15,
+    borderRadius: 20,
     justifyContent: "center",
   },
   CONTENT: {
     flex: 1,
+    flexDirection: "column",
   },
   TEXT_INPUT: {
+    alignItems: "center",
     backgroundColor: "white",
-    maxWidth: "70%",
-    minWidth: "70%",
     borderWidth: 1,
     paddingHorizontal: 20,
     paddingVertical: 8,
-    marginRight: 15,
     borderRadius: 10,
+    marginTop: 20,
   },
 })
