@@ -10,6 +10,8 @@ import HorizontalPicker from "@vseslav/react-native-horizontal-picker"
 import moment from "moment"
 import { Expense } from "../../../models/expense/expense"
 import { ExpenseItemData } from "../../../utils/types"
+import { AppTheme } from "../../../utils/themes"
+import { useTheme } from "../../../hooks/useTheme"
 
 export const ExpensesChart = ({
   expenseDetails,
@@ -19,10 +21,11 @@ export const ExpensesChart = ({
   pickedMonth: (val: number) => void
 }) => {
   const isFocused = useIsFocused()
-  const { expenseStore } = useStores()
+  const { expenseStore, user } = useStores()
   const { expenses } = expenseStore
   const [expenseData, setExpenseData] = useState<PieChartData[]>([])
   const [totalExpense, setTotalExpense] = useState<number>(0)
+  const { darkMode } = useTheme()
   const Items = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
   const itemWidth = 100
 
@@ -91,7 +94,12 @@ export const ExpensesChart = ({
   )
 
   return (
-    <View style={ExpenseStyle.CHART_CARD}>
+    <View
+      style={[
+        ExpenseStyle.CHART_CARD,
+        { backgroundColor: darkMode ? AppTheme.dark.colors.card : AppTheme.light.colors.card },
+      ]}
+    >
       <TextComp style={ExpenseStyle.TITLE} text="Expenses Chart" />
 
       <View style={{ height: 40 }}>
@@ -157,8 +165,7 @@ export const PieChartColorHandler = (categoryID: string) => {
 const ExpenseStyle = StyleSheet.create({
   CHART_CARD: {
     borderWidth: 1,
-    // height: 200,
-    borderRadius: 30,
+    borderRadius: 20,
     alignItems: "center",
   },
   ZOOM_ICON: {

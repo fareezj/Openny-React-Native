@@ -80,8 +80,42 @@ export function MainNavigator() {
         }}
         component={DashboardScreen}
       />
-      <Drawer.Screen name="addExpense" component={AddExpenseScreen} />
-      <Drawer.Screen name="analytics" component={AnalyticScreen} />
+      <Drawer.Screen
+        name="addExpense"
+        options={{
+          title: "Add Expense",
+          drawerLabelStyle: { fontSize: 16 },
+          drawerIcon: ({ focused, size }) => (
+            <Image
+              source={
+                focused
+                  ? require("../assets/expense-filled.png")
+                  : require("../assets/expense-outline.png")
+              }
+              style={{ width: 30, height: 30 }}
+            />
+          ),
+        }}
+        component={AddExpenseScreen}
+      />
+      <Drawer.Screen
+        name="analytics"
+        options={{
+          title: "Expense Analytics",
+          drawerLabelStyle: { fontSize: 16 },
+          drawerIcon: ({ focused, size }) => (
+            <Image
+              source={
+                focused
+                  ? require("../assets/analytics-filled.png")
+                  : require("../assets/analytics-outline.png")
+              }
+              style={{ width: 30, height: 30 }}
+            />
+          ),
+        }}
+        component={AnalyticScreen}
+      />
     </Drawer.Navigator>
   )
 }
