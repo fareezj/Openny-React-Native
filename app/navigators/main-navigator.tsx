@@ -10,6 +10,14 @@ import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
 import { DashboardScreen } from "../screens/dashboard/dashboard-screen"
 import { AddExpenseScreen } from "../screens/add-expense/add-expense-screen"
 import { AnalyticScreen } from "../screens/expense-analytics/analytics-screen"
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from "@react-navigation/drawer"
+import { Image, View } from "react-native"
+import { useStores } from "../models"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -34,22 +42,47 @@ export type PrimaryParamList = {
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createStackNavigator<PrimaryParamList>()
+const Drawer = createDrawerNavigator()
+
+function CustomDrawerContent(props) {
+  const { user } = useStores()
+
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
+      <DrawerItem label="Light Theme" onPress={() => user.toggleTheme()} />
+      <DrawerItem label="Dark Theme" onPress={() => user.toggleTheme()} />
+    </DrawerContentScrollView>
+  )
+}
 
 export function MainNavigator() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        cardStyle: { backgroundColor: "transparent" },
-        headerShown: false,
-      }}
+    <Drawer.Navigator
+      initialRouteName={"dashboard"}
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-      {/* <Stack.Screen name="welcome" component={WelcomeScreen} />
-      <Stack.Screen name="demo" component={DemoScreen} />
-      <Stack.Screen name="demoList" component={DemoListScreen} /> */}
-      <Stack.Screen name="dashboard" component={DashboardScreen} />
-      <Stack.Screen name="addExpense" component={AddExpenseScreen} />
-      <Stack.Screen name="analytics" component={AnalyticScreen} />
-    </Stack.Navigator>
+      <Drawer.Screen
+        name="dashboard"
+        options={{
+          title: "Dashboard",
+          drawerLabelStyle: { fontSize: 16 },
+          drawerIcon: ({ focused, size }) => (
+            <Image
+              source={
+                focused
+                  ? require("../assets/home-filled.png")
+                  : require("../assets/home-outline.png")
+              }
+              style={{ width: 30, height: 30 }}
+            />
+          ),
+        }}
+        component={DashboardScreen}
+      />
+      <Drawer.Screen name="addExpense" component={AddExpenseScreen} />
+      <Drawer.Screen name="analytics" component={AnalyticScreen} />
+    </Drawer.Navigator>
   )
 }
 

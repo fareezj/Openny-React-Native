@@ -41,9 +41,8 @@ const actions = [
 export const DashboardScreen = observer(function DashboardScreen() {
   const navigation = useNavigation()
   const isFocused = useIsFocused()
-  const { expenseStore, userStore } = useStores()
+  const { expenseStore, user } = useStores()
   const { expenses } = expenseStore
-  const { users } = userStore
   const [expenseItem, setExpenseItem] = useState<ExpenseItemData[]>()
   const [showExpenseDetail, setShowExpenseDetail] = useState<boolean>(false)
   const [showNewUserModal, setNewUserModal] = useState<boolean>(false)
@@ -66,7 +65,7 @@ export const DashboardScreen = observer(function DashboardScreen() {
     <View style={DashboardStyle.FULL}>
       <Screen style={DashboardStyle.CONTAINER} preset="fixed" backgroundColor={color.transparent}>
         <View style={DashboardStyle.HEADER}>
-          <Text style={DashboardStyle.HEADER_NAME} text={"Hello " + users[0]?.name ?? ""} />
+          <Text style={DashboardStyle.HEADER_NAME} text={"Hello " + user?.name ?? ""} />
           <Image source={require("../../../assets/user.png")} style={DashboardStyle.HEADER_ICON} />
         </View>
         <ExpensesChart expenseDetails={expenseItem} pickedMonth={(val) => setCurrentMonth(val)} />
@@ -98,13 +97,13 @@ export const DashboardScreen = observer(function DashboardScreen() {
       {showExpenseDetail ? (
         <ExpenseItemModal closeModal={() => setShowExpenseDetail(false)} id={currentExpenseID} />
       ) : null}
-      {users.length === 0 ? <NewUserModal closeModal={() => setNewUserModal(false)} /> : null}
+      {!user.id ? <NewUserModal closeModal={() => setNewUserModal(false)} /> : null}
     </View>
   )
 })
 
 const DashboardStyle = StyleSheet.create({
-  FULL: { flex: 1, backgroundColor: "#0E164C" },
+  FULL: { flex: 1 },
   CONTAINER: {
     backgroundColor: color.transparent,
     paddingHorizontal: spacing[4],

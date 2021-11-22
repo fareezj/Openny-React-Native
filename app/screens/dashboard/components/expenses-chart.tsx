@@ -157,7 +157,6 @@ export const PieChartColorHandler = (categoryID: string) => {
 const ExpenseStyle = StyleSheet.create({
   CHART_CARD: {
     borderWidth: 1,
-    backgroundColor: "#51499C",
     // height: 200,
     borderRadius: 30,
     alignItems: "center",

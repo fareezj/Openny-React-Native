@@ -4,13 +4,17 @@
  * and a "main" flow (which is contained in your MainNavigator) which the user
  * will use once logged in.
  */
-import React, { useEffect } from "react"
-import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
+import React, { useEffect, useState } from "react"
+import { DarkTheme, NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainNavigator } from "./main-navigator"
 import { color } from "../theme"
 import { useStores } from "../models"
 import { CategoryData } from "../screens/add-expense/constants/category-data"
+import { AppTheme, LightTheme } from "../utils/themes"
+import { observer } from "mobx-react-lite"
+import { onSnapshot } from "mobx-state-tree"
+import { theme } from "@storybook/react-native/dist/preview/components/Shared/theme"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -51,8 +55,13 @@ export const RootNavigator = React.forwardRef<
   NavigationContainerRef,
   Partial<React.ComponentProps<typeof NavigationContainer>>
 >((props, ref) => {
-  const { expenseCategoryStore } = useStores()
+  const { expenseCategoryStore, user } = useStores()
   const { expenseCategories } = expenseCategoryStore
+  const [mode, setMode] = useState(false)
+  onSnapshot(user, (userUpdate) => {
+    console.log(userUpdate)
+    setMode(userUpdate.darkMode)
+  })
 
   useEffect(() => {
     let initCategories = CategoryData
@@ -64,7 +73,7 @@ export const RootNavigator = React.forwardRef<
   }, [])
 
   return (
-    <NavigationContainer {...props} ref={ref}>
+    <NavigationContainer {...props} ref={ref} theme={mode ? AppTheme.dark : AppTheme.light}>
       <RootStack />
     </NavigationContainer>
   )

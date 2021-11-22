@@ -3,6 +3,7 @@ import { CharacterStoreModel } from "../character-store/character-store"
 import { ExpenseCategoryStoreModel } from "../expense-category-store/expense-category-store"
 import { ExpenseStoreModel } from "../expense-store/expense-store"
 import { UserStoreModel } from "../user-store/user-store"
+import { UserModel } from "../user/user"
 
 /**
  * A RootStore model.
@@ -12,7 +13,7 @@ export const RootStoreModel = types.model("RootStore").props({
   characterStore: types.optional(CharacterStoreModel, {} as any),
   expenseStore: types.optional(ExpenseStoreModel, {} as any),
   expenseCategoryStore: types.optional(ExpenseCategoryStoreModel, {} as any),
-  userStore: types.optional(UserStoreModel, {} as any)
+  user: types.optional(UserModel, {} as any)
 })
 
 /**

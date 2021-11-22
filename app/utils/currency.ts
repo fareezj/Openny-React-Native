@@ -1,4 +1,4 @@
 export const CurrencyFormatter = (value) => {
-  const res = Intl.NumberFormat("en-UK", { style: "currency", currency: "MYR" }).format(value)
+  const res = "RM" + value
   return res
 }

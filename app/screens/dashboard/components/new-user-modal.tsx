@@ -4,15 +4,15 @@ import { TextInput } from "react-native-gesture-handler"
 import Modal from "react-native-modal"
 import { Text } from "../../../components"
 import { useStores } from "../../../models"
-import { User } from "../../../models/user/user"
 
 export const NewUserModal = ({ closeModal }) => {
-  const { userStore } = useStores()
+  const { user } = useStores()
   const [name, setName] = useState<string>("")
-  const [nameReqBody, setNameReqBody] = useState<User>({
+  const [nameReqBody, setNameReqBody] = useState({
     id: "",
     name: "",
     image: "",
+    darkMode: false,
   })
 
   function addNewUser() {
@@ -20,8 +20,9 @@ export const NewUserModal = ({ closeModal }) => {
     temp.id = Math.random().toString()
     temp.name = name
     temp.image = ""
+    temp.darkMode = false
     setNameReqBody(temp)
-    userStore.saveUser(temp)
+    user.saveUser(temp)
   }
 
   return (
