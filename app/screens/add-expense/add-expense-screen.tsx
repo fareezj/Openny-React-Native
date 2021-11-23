@@ -11,13 +11,14 @@ import { CalendarModal } from "./components/calendar-modal"
 import { useStores } from "../../models"
 import { Expense } from "../../models/expense/expense"
 import { HeaderBack } from "../../components/header-back/header-back"
+import { useTheme } from "../../hooks/useTheme"
 
 export const AddExpenseScreen = () => {
   const navigation = useNavigation()
   const { expenseStore, expenseCategoryStore } = useStores()
   const { expenses } = expenseStore
   const { expenseCategories } = expenseCategoryStore
-
+  const { darkMode } = useTheme()
   const [showCalculatorModal, setShowCalculatorModal] = useState<boolean>(false)
   const [showCategoryModal, setShowCategoryModal] = useState<boolean>(false)
   const [showCalendarModal, setShowCalendarModal] = useState<boolean>(false)
@@ -43,11 +44,7 @@ export const AddExpenseScreen = () => {
         if (existingValue) {
           temp["colourCode"] = existingValue.colourCode
         } else {
-          temp["colourCode"] = (
-            "#" +
-            ((Math.random() * 0xffffff) << 0).toString(16) +
-            "000000"
-          ).slice(0, 7)
+          temp["colourCode"] = "hsla(" + ~~(360 * Math.random()) + "," + "70%," + "80%,1)"
         }
       }
       setNewExpense(temp)
@@ -88,13 +85,17 @@ export const AddExpenseScreen = () => {
 
   return (
     <View style={AddExpenseStyle.FULL}>
-      <Screen style={AddExpenseStyle.CONTAINER} preset="fixed" backgroundColor={color.transparent}>
-        <HeaderBack title={"Add New Expense"} />
+      <Screen
+        style={AddExpenseStyle.CONTAINER}
+        unsafe={false}
+        preset="fixed"
+        backgroundColor={color.transparent}
+      >
         <View style={AddExpenseStyle.FIELD_BASE}>
           <View style={AddExpenseStyle.FIELD_ROW}>
             <Text style={AddExpenseStyle.ROW_TITLE} numberOfLines={2} text="Total Expense" />
             <TextInput
-              style={AddExpenseStyle.TEXT_INPUT}
+              style={[AddExpenseStyle.TEXT_INPUT, { borderColor: darkMode ? "white" : "black" }]}
               placeholder="Number"
               editable={false}
               value={CurrencyFormatter(expenseTotal)}
@@ -102,7 +103,10 @@ export const AddExpenseScreen = () => {
             <TouchableOpacity onPress={() => setShowCalculatorModal(true)}>
               <Image
                 source={require("../../../assets/calculator.png")}
-                style={[AddExpenseStyle.BACK_ICON, { height: 30, width: 30 }]}
+                style={[
+                  AddExpenseStyle.BACK_ICON,
+                  { height: 30, width: 30, tintColor: darkMode ? "white" : "#0E164C" },
+                ]}
               />
             </TouchableOpacity>
           </View>
@@ -127,7 +131,10 @@ export const AddExpenseScreen = () => {
             <TouchableOpacity onPress={() => setShowCategoryModal(true)}>
               <Image
                 source={require("../../../assets/folder.png")}
-                style={[AddExpenseStyle.BACK_ICON, { height: 30, width: 30 }]}
+                style={[
+                  AddExpenseStyle.BACK_ICON,
+                  { height: 30, width: 30, tintColor: darkMode ? "white" : "#0E164C" },
+                ]}
               />
             </TouchableOpacity>
           </View>
@@ -142,17 +149,22 @@ export const AddExpenseScreen = () => {
             <TouchableOpacity onPress={() => setShowCalendarModal(true)}>
               <Image
                 source={require("../../../assets/calendar.png")}
-                style={[AddExpenseStyle.BACK_ICON, { height: 30, width: 30 }]}
+                style={[
+                  AddExpenseStyle.BACK_ICON,
+                  { height: 30, width: 30, tintColor: darkMode ? "white" : "#0E164C" },
+                ]}
               />
             </TouchableOpacity>
           </View>
         </View>
         <TouchableOpacity
           disabled={!isFormValid}
-          style={[{ ...AddExpenseStyle.ADD_BTN, backgroundColor: isFormValid ? "white" : "gray" }]}
+          style={[
+            { ...AddExpenseStyle.ADD_BTN, backgroundColor: isFormValid ? "#BEE1FF" : "gray" },
+          ]}
           onPress={() => onAddExpense()}
         >
-          <Text style={AddExpenseStyle.ADD_TEXT} text="Add Expense" />
+          <Text style={[AddExpenseStyle.ADD_TEXT]} text="Add Expense" />
         </TouchableOpacity>
       </Screen>
       {showCalculatorModal ? (
@@ -196,7 +208,7 @@ const AddExpenseStyle = StyleSheet.create({
     borderRadius: 40,
   },
   ADD_TEXT: {
-    color: "#0E164C",
+    color: "white",
     fontSize: 16,
     textAlign: "center",
     fontWeight: "bold",
@@ -215,10 +227,9 @@ const AddExpenseStyle = StyleSheet.create({
     color: "black",
     paddingStart: 5,
   },
-  FULL: { flex: 1, backgroundColor: "#0E164C" },
+  FULL: { flex: 1 },
   FIELD_BASE: {
     flexDirection: "column",
-    marginTop: 40,
   },
   FIELD_ROW: {
     flexDirection: "row",
@@ -232,7 +243,8 @@ const AddExpenseStyle = StyleSheet.create({
     height: "100%",
     paddingHorizontal: 20,
     marginRight: 15,
-    borderRadius: 20,
+    borderRadius: 10,
+    borderWidth: 1,
   },
   ROW_TITLE: {
     maxWidth: 100,

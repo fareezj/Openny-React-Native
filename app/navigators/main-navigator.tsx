@@ -4,7 +4,7 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React from "react"
+import React, { useState } from "react"
 import { createStackNavigator } from "@react-navigation/stack"
 import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
 import { DashboardScreen } from "../screens/dashboard/dashboard-screen"
@@ -16,8 +16,9 @@ import {
   DrawerItemList,
   DrawerItem,
 } from "@react-navigation/drawer"
-import { Image, View } from "react-native"
+import { Image, View, Switch, Text } from "react-native"
 import { useStores } from "../models"
+import { useTheme } from "../hooks/useTheme"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -50,16 +51,41 @@ function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItemList {...props} />
-      <DrawerItem label="Light Theme" onPress={() => user.toggleTheme()} />
-      <DrawerItem label="Dark Theme" onPress={() => user.toggleTheme()} />
+      <View
+        style={{
+          flexDirection: "row",
+          marginTop: 22,
+          marginHorizontal: 20,
+          justifyContent: "space-between",
+        }}
+      >
+        <Text>Dark Mode</Text>
+        <Switch
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          thumbColor={user.darkMode ? "#f5dd4b" : "#f4f3f4"}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={() => user.toggleTheme()}
+          value={user.darkMode}
+        />
+      </View>
     </DrawerContentScrollView>
   )
 }
 
 export function MainNavigator() {
+  const { darkMode } = useTheme()
   return (
     <Drawer.Navigator
       initialRouteName={"dashboard"}
+      screenOptions={{
+        drawerStyle: {
+          backgroundColor: darkMode ? "#0E164C" : "white",
+          width: 250,
+        },
+        headerStyle: {
+          backgroundColor: darkMode ? "#0E164C" : "white",
+        },
+      }}
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
       <Drawer.Screen
@@ -74,7 +100,7 @@ export function MainNavigator() {
                   ? require("../assets/home-filled.png")
                   : require("../assets/home-outline.png")
               }
-              style={{ width: 30, height: 30 }}
+              style={{ width: 30, height: 30, tintColor: darkMode && !focused ? "white" : null }}
             />
           ),
         }}
@@ -92,7 +118,7 @@ export function MainNavigator() {
                   ? require("../assets/expense-filled.png")
                   : require("../assets/expense-outline.png")
               }
-              style={{ width: 30, height: 30 }}
+              style={{ width: 30, height: 30, tintColor: darkMode && !focused ? "white" : null }}
             />
           ),
         }}
@@ -110,7 +136,7 @@ export function MainNavigator() {
                   ? require("../assets/analytics-filled.png")
                   : require("../assets/analytics-outline.png")
               }
-              style={{ width: 30, height: 30 }}
+              style={{ width: 30, height: 30, tintColor: darkMode && !focused ? "white" : null }}
             />
           ),
         }}

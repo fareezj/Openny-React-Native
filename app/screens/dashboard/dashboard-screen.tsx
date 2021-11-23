@@ -63,31 +63,38 @@ export const DashboardScreen = observer(function DashboardScreen() {
 
   return (
     <View style={DashboardStyle.FULL}>
-      <Screen style={DashboardStyle.CONTAINER} preset="fixed" backgroundColor={color.transparent}>
+      <Screen
+        style={DashboardStyle.CONTAINER}
+        unsafe={true}
+        preset="fixed"
+        backgroundColor={color.transparent}
+      >
         <View style={DashboardStyle.HEADER}>
           <Text style={DashboardStyle.HEADER_NAME} text={"Hello " + user?.name ?? ""} />
           <Image source={require("../../../assets/user.png")} style={DashboardStyle.HEADER_ICON} />
         </View>
         <ExpensesChart expenseDetails={expenseItem} pickedMonth={(val) => setCurrentMonth(val)} />
-        <FlatList
-          data={expenseItem}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => {
-            return (
-              <ExpenseItem
-                id={item.id}
-                category={item.category}
-                colourCode={item.colourCode}
-                total={item.total}
-                date={item.date}
-                onClickDetail={(id: string) => {
-                  setCurrentExpenseID(id)
-                  setShowExpenseDetail(true)
-                }}
-              />
-            )
-          }}
-        />
+        <View style={DashboardStyle.ITEM_BASE}>
+          <FlatList
+            data={expenseItem}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => {
+              return (
+                <ExpenseItem
+                  id={item.id}
+                  category={item.category}
+                  colourCode={item.colourCode}
+                  total={item.total}
+                  date={item.date}
+                  onClickDetail={(id: string) => {
+                    setCurrentExpenseID(id)
+                    setShowExpenseDetail(true)
+                  }}
+                />
+              )
+            }}
+          />
+        </View>
       </Screen>
       <FloatingAction
         actions={actions}
@@ -103,7 +110,11 @@ export const DashboardScreen = observer(function DashboardScreen() {
 })
 
 const DashboardStyle = StyleSheet.create({
-  FULL: { flex: 1 },
+  ITEM_BASE: {
+    marginTop: 20,
+    flex: 1,
+  },
+  FULL: { flex: 1, marginTop: 20 },
   CONTAINER: {
     backgroundColor: color.transparent,
     paddingHorizontal: spacing[4],
@@ -112,6 +123,7 @@ const DashboardStyle = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    marginBottom: 20,
   },
   HEADER_NAME: {
     fontSize: 22,
@@ -119,8 +131,8 @@ const DashboardStyle = StyleSheet.create({
     padding: 10,
   },
   HEADER_ICON: {
-    width: 100,
-    height: 60,
+    width: 60,
+    height: 40,
     resizeMode: "contain",
   },
 })

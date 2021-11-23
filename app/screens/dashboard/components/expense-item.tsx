@@ -1,9 +1,9 @@
 import React from "react"
-import { StyleSheet, View, Image, TouchableOpacity } from "react-native"
-import { Text } from "../../../components"
+import { StyleSheet, View, Image, TouchableOpacity, Text } from "react-native"
 import { CategoryImages } from "../../add-expense/constants/category-data"
 import { CurrencyFormatter } from "../../../utils/currency"
 import { useStores } from "../../../models"
+import { useTheme } from "../../../hooks/useTheme"
 
 export const ExpenseItem = ({
   id,
@@ -21,11 +21,11 @@ export const ExpenseItem = ({
   onClickDetail: (data: string) => void
 }) => {
   return (
-    <View style={ExpenseStyle.BASE}>
+    <View style={[ExpenseStyle.BASE, { backgroundColor: colourCode }]}>
       <TouchableOpacity onPress={() => onClickDetail(id)}>
         <View style={ExpenseStyle.CONTAINER}>
           <ExpenseCategory id={category} colourCode={colourCode} />
-          <Text style={ExpenseStyle.TOTAL} text={CurrencyFormatter(total)} />
+          <Text style={[ExpenseStyle.TOTAL]}>{CurrencyFormatter(total)}</Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -43,7 +43,7 @@ const ExpenseCategory = ({ id, colourCode }: { id: string; colourCode: string })
           <View style={{ flexDirection: "row", alignItems: "center" }} key={id}>
             <Image style={ExpenseStyle.ICON} source={CategoryImages[val.categoryImage].image} />
             <View style={[ExpenseStyle.CAT_COLOR, { backgroundColor: colourCode }]} />
-            <Text style={ExpenseStyle.NAME} text={val.categoryName} />
+            <Text style={ExpenseStyle.NAME}>{val.categoryName}</Text>
           </View>
         ) : null,
       )}
@@ -63,6 +63,10 @@ const ExpenseStyle = StyleSheet.create({
     borderRadius: 30,
     marginHorizontal: 25,
     marginVertical: 10,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    elevation: 1,
+    borderColor: "white",
   },
   CONTAINER: {
     flexDirection: "row",

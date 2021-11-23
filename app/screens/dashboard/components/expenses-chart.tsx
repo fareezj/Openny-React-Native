@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { View, StyleSheet, Image } from "react-native"
+import { View, StyleSheet, Image, useWindowDimensions } from "react-native"
 import { Text as TextComp } from "../../../components"
 import { PieChartData, PieChartView } from "./pie-chart/pie-chart-view"
 import { useIsFocused } from "@react-navigation/native"
@@ -28,6 +28,7 @@ export const ExpensesChart = ({
   const { darkMode } = useTheme()
   const Items = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
   const itemWidth = 100
+  const { width, height } = useWindowDimensions()
 
   useEffect(() => {
     if (isFocused) {
@@ -89,7 +90,7 @@ export const ExpensesChart = ({
 
   const renderMonth = (item) => (
     <View style={{ width: itemWidth, alignItems: "center" }}>
-      <TextComp preset="fieldLabel" style={{ color: "white", fontSize: 25 }} text={item} />
+      <TextComp preset="fieldLabel" style={{ color: "white", fontSize: 18 }} text={item} />
     </View>
   )
 
@@ -97,12 +98,15 @@ export const ExpensesChart = ({
     <View
       style={[
         ExpenseStyle.CHART_CARD,
-        { backgroundColor: darkMode ? AppTheme.dark.colors.card : AppTheme.light.colors.card },
+        {
+          backgroundColor: darkMode ? "rgba(0, 0, 0, 0.18)" : AppTheme.light.colors.card,
+          height: height / 3,
+        },
       ]}
     >
       <TextComp style={ExpenseStyle.TITLE} text="Expenses Chart" />
 
-      <View style={{ height: 40 }}>
+      <View style={{ height: 20 }}>
         <HorizontalPicker
           data={Items}
           renderItem={renderMonth}
@@ -112,13 +116,13 @@ export const ExpensesChart = ({
       </View>
       <Image
         source={require("../../../../assets/up-arrows.png")}
-        style={{ width: 30, height: 30, tintColor: "white" }}
+        style={{ width: 30, height: 30, tintColor: darkMode ? "white" : "black" }}
       />
       {expenseData.length !== 0 ? (
         <PieChartView
           data={expenseData}
-          outerRadius={118}
-          innerRadius={80}
+          outerRadius={width / 5}
+          innerRadius={width / 7}
           type={"simple"}
           totalValue={totalExpense}
         />
@@ -167,6 +171,11 @@ const ExpenseStyle = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     alignItems: "center",
+    shadowOffset: { width: 0, height: 0 },
+    backgroundColor: "#FFFFFFFF",
+    shadowOpacity: 0.5,
+    elevation: 1,
+    borderColor: "white",
   },
   ZOOM_ICON: {
     width: 20,

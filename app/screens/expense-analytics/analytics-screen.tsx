@@ -10,6 +10,7 @@ import { onSnapshot } from "mobx-state-tree"
 import { ExpenseItemData } from "../../utils/types"
 import { ExpenseDateSorter } from "../../utils/expenseDateSorter"
 import HorizontalPicker from "@vseslav/react-native-horizontal-picker"
+import { useTheme } from "../../hooks/useTheme"
 
 export const AnalyticScreen = () => {
   const { expenseStore } = useStores()
@@ -21,6 +22,7 @@ export const AnalyticScreen = () => {
   const contentInset = { top: 20, bottom: 20 }
   const Items = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
   const itemWidth = 100
+  const { darkMode } = useTheme()
 
   useEffect(() => {
     const res = ExpenseDateSorter(expenses, currentMonth.toString())
@@ -82,8 +84,7 @@ export const AnalyticScreen = () => {
   return (
     <View style={AnalticsStyle.FULL}>
       <Screen style={AnalticsStyle.CONTAINER} preset="fixed" backgroundColor={color.transparent}>
-        <HeaderBack title={"Expense Analysis Graph"} />
-        <View style={{ borderWidth: 0, height: 450, marginTop: 50 }}>
+        <View>
           <View style={{ height: 40 }}>
             <HorizontalPicker
               data={Items}
@@ -95,20 +96,27 @@ export const AnalyticScreen = () => {
           <View style={{ justifyContent: "center", flexDirection: "row" }}>
             <Image
               source={require("../../../assets/up-arrows.png")}
-              style={{ width: 30, height: 30, tintColor: "white" }}
+              style={{ width: 30, height: 30, tintColor: darkMode ? "white" : "black" }}
             />
           </View>
           {expenseExist ? (
-            <ScrollView horizontal={true} bounces={true} style={{ paddingTop: 20 }}>
+            <ScrollView
+              horizontal={true}
+              bounces={true}
+              style={{ paddingTop: 20, paddingBottom: 50 }}
+            >
               <View>
-                <Text text="RM" style={AnalticsStyle.Y_LABEL} />
+                <Text
+                  text="RM"
+                  style={[AnalticsStyle.Y_LABEL, { color: darkMode ? "white" : "black" }]}
+                />
               </View>
               <View style={AnalticsStyle.CHART_BASE}>
                 <YAxis
                   data={dataMapping}
                   contentInset={contentInset}
                   svg={{
-                    fill: "white",
+                    fill: darkMode ? "white" : "black",
                     fontSize: 12,
                   }}
                   numberOfTicks={5}
@@ -130,10 +138,13 @@ export const AnalyticScreen = () => {
                     moment(dataXValue[index], "DD MMM YYYY").format("DD")
                   }
                   contentInset={{ left: 20, right: 20 }}
-                  svg={{ fontSize: 12, fill: "white" }}
+                  svg={{ fontSize: 12, fill: darkMode ? "white" : "black" }}
                 />
                 <View>
-                  <Text text="Days" style={AnalticsStyle.X_LABEL} />
+                  <Text
+                    text="Days"
+                    style={[AnalticsStyle.X_LABEL, { color: darkMode ? "white" : "black" }]}
+                  />
                 </View>
               </View>
             </ScrollView>
@@ -182,7 +193,7 @@ const AnalticsStyle = StyleSheet.create({
     height: 300,
     width: 500,
   },
-  FULL: { flex: 1, backgroundColor: "#0E164C" },
+  FULL: { flex: 1 },
   TITLE: {
     fontSize: 22,
     fontWeight: "bold",

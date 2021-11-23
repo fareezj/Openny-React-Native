@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import {
   View,
   StyleSheet,
@@ -6,12 +6,15 @@ import {
   Image as ImageComp,
   TouchableOpacity,
   Dimensions,
+  useWindowDimensions,
 } from "react-native"
 import { PieChart } from "react-native-svg-charts"
 import { Circle, G, Line, Text, Image } from "react-native-svg"
 import { getPieChartRatioValues } from "./pie-chart-calculation"
 import { CurrencyFormatter } from "../../../../utils/currency"
+import { useTheme } from "../../../../hooks/useTheme"
 const deviceWidth = Dimensions.get("window").width
+const deviceHeight = Dimensions.get("window").height
 export interface PieChartData {
   category: number
   value: number
@@ -27,6 +30,9 @@ export interface PieChartCardProps extends React.PropsWithChildren<any> {
 
 export const PieChartView = (props: PieChartCardProps) => {
   const { data, innerRadius, outerRadius, type, totalValue } = props
+  const { darkMode } = useTheme()
+
+  useEffect(() => {}, [darkMode])
 
   const datas = [50, 10, 40, 95, -4, -24, 85, 91, 23, 34]
   const tempVal = []
@@ -91,7 +97,7 @@ export const PieChartView = (props: PieChartCardProps) => {
   return (
     <View>
       <PieChart
-        style={{ width: 350, height: 250 }}
+        style={{ width: deviceWidth, height: deviceHeight / 5 }}
         data={pieData}
         innerRadius={innerRadius}
         outerRadius={outerRadius}
@@ -100,7 +106,9 @@ export const PieChartView = (props: PieChartCardProps) => {
       >
         {type !== "simple" ? <Labels /> : null}
         <View>
-          <TextComp style={PieChartStyle.TOTAL_TEXT}>{CurrencyFormatter(totalValue)}</TextComp>
+          <TextComp style={[PieChartStyle.TOTAL_TEXT, { color: darkMode ? "white" : "black" }]}>
+            {CurrencyFormatter(totalValue)}
+          </TextComp>
         </View>
       </PieChart>
     </View>
@@ -110,11 +118,10 @@ export const PieChartView = (props: PieChartCardProps) => {
 export const PieChartStyle = StyleSheet.create({
   TOTAL_TEXT: {
     position: "absolute",
-    left: deviceWidth / 2 - 88,
-    top: 100,
+    left: deviceWidth / 3,
+    top: deviceHeight / 12,
     justifyContent: "center",
     textAlign: "center",
-    color: "white",
     fontWeight: "bold",
     fontSize: 18,
     maxWidth: 140,

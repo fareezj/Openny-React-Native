@@ -1,7 +1,9 @@
 import React from "react"
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet, Dimensions } from "react-native"
 import Modal from "react-native-modal"
 import { Calculator } from "react-native-calculator"
+const deviceWidth = Dimensions.get("window").width
+const deviceHeight = Dimensions.get("window").height
 
 export const CalculatorModal = ({ closeModal, getExpenseTotal, currentTotal }) => {
   const getTotalExpense = (value) => {
@@ -15,6 +17,7 @@ export const CalculatorModal = ({ closeModal, getExpenseTotal, currentTotal }) =
           <View style={CalculatorModalStyle.CONTENT}>
             <Calculator
               style={{ flex: 1 }}
+              displayColor={"black"}
               hasAcceptButton={true}
               value={currentTotal}
               onAccept={(value) => getTotalExpense(value.toString())}
@@ -31,8 +34,8 @@ const CalculatorModalStyle = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     backgroundColor: "white",
-    maxHeight: 300,
-    maxWidth: 300,
+    maxHeight: deviceHeight / 2,
+    width: deviceWidth / 1.1,
     padding: 15,
     justifyContent: "center",
   },
