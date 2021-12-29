@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { View, StyleSheet, ScrollView, Image } from "react-native"
+import { View, StyleSheet, ScrollView, Image, Dimensions } from "react-native"
 import { Text, Screen } from "../../components"
 import { color, spacing } from "../../theme"
 import { LineChart, Grid, YAxis, XAxis } from "react-native-svg-charts"
@@ -11,7 +11,8 @@ import { ExpenseItemData } from "../../utils/types"
 import { ExpenseDateSorter } from "../../utils/expenseDateSorter"
 import HorizontalPicker from "@vseslav/react-native-horizontal-picker"
 import { useTheme } from "../../hooks/useTheme"
-
+const deviceWidth = Dimensions.get("window").width
+const deviceHeight = Dimensions.get("window").height
 export const AnalyticScreen = () => {
   const { expenseStore } = useStores()
   const { expenses } = expenseStore
@@ -83,7 +84,7 @@ export const AnalyticScreen = () => {
 
   return (
     <View style={AnalticsStyle.FULL}>
-      <Screen style={AnalticsStyle.CONTAINER} preset="fixed" backgroundColor={color.transparent}>
+      <Screen style={AnalticsStyle.CONTAINER} preset="scroll" backgroundColor={color.transparent}>
         <View>
           <View style={{ height: 40 }}>
             <HorizontalPicker
@@ -103,7 +104,11 @@ export const AnalyticScreen = () => {
             <ScrollView
               horizontal={true}
               bounces={true}
-              style={{ paddingTop: 20, paddingBottom: 50 }}
+              style={{
+                paddingTop: 20,
+                paddingBottom: 100,
+                borderWidth: 1,
+              }}
             >
               <View>
                 <Text
@@ -137,7 +142,7 @@ export const AnalyticScreen = () => {
                   formatLabel={(value, index) =>
                     moment(dataXValue[index], "DD MMM YYYY").format("DD")
                   }
-                  contentInset={{ left: 20, right: 20 }}
+                  contentInset={{ left: 50, right: 20 }}
                   svg={{ fontSize: 12, fill: darkMode ? "white" : "black" }}
                 />
                 <View>
@@ -184,13 +189,13 @@ const AnalticsStyle = StyleSheet.create({
   },
   X_LABEL: {
     position: "absolute",
-    top: 300,
-    left: 520,
+    top: deviceHeight / 2.5,
+    left: deviceWidth * 1.2,
   },
   X_AXIS: {
     marginHorizontal: -500,
     marginVertical: 300,
-    height: 300,
+    height: "100%",
     width: 500,
   },
   FULL: { flex: 1 },

@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { View, StyleSheet, Button } from "react-native"
+import { View, StyleSheet, Button, TouchableOpacity } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 import Modal from "react-native-modal"
 import { Text } from "../../../components"
@@ -41,9 +41,9 @@ export const NewUserModal = ({ closeModal }) => {
               onChangeText={setName}
               style={NewUserStyle.TEXT_INPUT}
             />
-            <View style={NewUserStyle.BUTTON}>
-              <Button title="Okay!" onPress={() => addNewUser()} />
-            </View>
+            <TouchableOpacity style={NewUserStyle.BUTTON} onPress={() => addNewUser()}>
+              <Text style={{ textAlign: "center" }}>Thats me</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>

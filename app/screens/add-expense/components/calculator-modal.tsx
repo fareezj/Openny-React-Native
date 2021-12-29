@@ -14,15 +14,13 @@ export const CalculatorModal = ({ closeModal, getExpenseTotal, currentTotal }) =
     <View>
       <Modal isVisible={true} onBackdropPress={() => closeModal()}>
         <View style={CalculatorModalStyle.BASE}>
-          <View style={CalculatorModalStyle.CONTENT}>
-            <Calculator
-              style={{ flex: 1 }}
-              displayColor={"black"}
-              hasAcceptButton={true}
-              value={currentTotal}
-              onAccept={(value) => getTotalExpense(value.toString())}
-            />
-          </View>
+          <Calculator
+            style={{ flex: 1 }}
+            displayColor={"green"}
+            hasAcceptButton={true}
+            value={currentTotal}
+            onAccept={(value) => getTotalExpense(value.toString())}
+          />
         </View>
       </Modal>
     </View>
@@ -35,12 +33,8 @@ const CalculatorModalStyle = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: "white",
     maxHeight: deviceHeight / 2,
-    width: deviceWidth / 1.1,
     padding: 15,
     justifyContent: "center",
-  },
-  CONTENT: {
-    flex: 1,
   },
   TEXT_INPUT: {
     borderWidth: 1,

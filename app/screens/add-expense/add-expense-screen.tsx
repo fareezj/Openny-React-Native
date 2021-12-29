@@ -239,6 +239,7 @@ const AddExpenseStyle = StyleSheet.create({
   },
   TEXT_INPUT: {
     backgroundColor: "white",
+    color: "black",
     flexGrow: 1,
     height: "100%",
     paddingHorizontal: 20,

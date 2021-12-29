@@ -121,8 +121,8 @@ export const ExpensesChart = ({
       {expenseData.length !== 0 ? (
         <PieChartView
           data={expenseData}
-          outerRadius={width / 5}
-          innerRadius={width / 7}
+          outerRadius={width / 5.5}
+          innerRadius={width / 7.5}
           type={"simple"}
           totalValue={totalExpense}
         />
